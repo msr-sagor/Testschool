@@ -1,33 +1,24 @@
-<!DOCTYPE html>
-<html>
-<body>
+<canvas id="c" width="500" height="250"></canvas>
 
-<canvas id="c" width="400" height="200"></canvas><br>
-
-<input id="name" placeholder="Name">
-<input id="batch" placeholder="SSC 2023">
-<input id="school" placeholder="School">
-<input id="year" placeholder="Glory Year">
-
-<button onclick="draw()">Generate</button>
+<button onclick="download()">Download</button>
 
 <script>
 function draw() {
-  const c = document.getElementById("c")
   const ctx = c.getContext("2d")
 
-  ctx.fillStyle = "#111"
-  ctx.fillRect(0,0,400,200)
+  ctx.fillStyle = "#000"
+  ctx.fillRect(0,0,500,250)
 
-  ctx.fillStyle = "white"
-  ctx.font = "20px Arial"
+  ctx.fillStyle = "#fff"
+  ctx.font = "24px Arial"
 
-  ctx.fillText(document.getElementById("name").value, 20, 40)
-  ctx.fillText("SSC Batch: " + document.getElementById("batch").value, 20, 80)
-  ctx.fillText(document.getElementById("school").value, 20, 120)
-  ctx.fillText("Year: " + document.getElementById("year").value, 20, 160)
+  ctx.fillText("SSC 2023", 20, 50)
+}
+
+function download() {
+  const link = document.createElement('a')
+  link.download = "banner.png"
+  link.href = c.toDataURL()
+  link.click()
 }
 </script>
-
-</body>
-</html>
