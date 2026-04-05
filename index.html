@@ -1,26 +1,16 @@
-<!DOCTYPE html>
-<html>
-<body>
-
-<h2>Approved Students</h2>
-<div id="students"></div>
-
 <script>
-async function loadStudents() {
-  const res = await fetch('/data/students.json')
+async function load() {
+  const res = await fetch('/api/getStudents')
   const data = await res.json()
 
   let html = ""
 
   data.approved.forEach(s => {
-    html += `<div>${s.name} (${s.batch})</div>`
+    html += `<div>${s.name} - ${s.batch}</div>`
   })
 
-  document.getElementById("students").innerHTML = html
+  document.body.innerHTML = html
 }
 
-loadStudents()
+load()
 </script>
-
-</body>
-</html>
