@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Student Submit</title>
+</head>
+<body>
+
+<h2>Student Profile Submit</h2>
+
+<input id="name" placeholder="Name"><br>
+<input id="batch" placeholder="SSC Batch"><br>
+<input id="school" placeholder="School Name"><br>
+<input id="year" placeholder="Year"><br>
+
+<button onclick="submitData()">Submit</button>
+
+<script>
+async function submitData() {
+  const data = {
+    name: document.getElementById('name').value,
+    batch: document.getElementById('batch').value,
+    school: document.getElementById('school').value,
+    year: document.getElementById('year').value,
+    status: "pending"
+  }
+
+  await fetch('/api/submit', {
+    method: 'POST',
+    body: JSON.stringify(data)
+  })
+
+  alert("Submitted! Wait for admin approval.")
+}
+</script>
+
+</body>
+</html>
