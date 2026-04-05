@@ -1,13 +1,47 @@
-import fs from 'fs'
-
 export default async function handler(req, res) {
-  const newData = JSON.parse(req.body)
+  const body = JSON.parse(req.body)
 
-  const file = JSON.parse(fs.readFileSync('./data/students.json'))
+  const file = await getFile()
 
-  file.pending.push(newData)
+  file.pending.push(body)
 
-  fs.writeFileSync('./data/students.json', JSON.stringify(file, null, 2))
+  await updateFile(file)
 
-  res.status(200).json({ ok: true })
+  res.json({ ok: true })
+}
+
+async function getFile() {
+  const res = await fetch(`https://api.github.com/repos/${process.env.REPO_OWNER}/${process.env.REPO_NAME}/contents/${process.env.FILE_PATH}`, {
+    headers: {
+      Authorization: `Bearer ${process.env.GITHUB_TOKEN}`
+    }
+  })
+
+  const data = await res.json()
+  const content = JSON.parse(Buffer.from(data.content, 'base64').toString())
+
+  return content
+}
+
+async function updateFile(newData) {
+  const fileRes = await fetch(`https://api.github.com/repos/${process.env.REPO_OWNER}/${process.env.REPO_NAME}/contents/${process.env.FILE_PATH}`, {
+    headers: {
+      Authorization: `Bearer ${process.env.GITHUB_TOKEN}`
+    }
+  })
+
+  const fileData = await fileRes.json()
+
+  await fetch(`https://api.github.com/repos/${process.env.REPO_OWNER}/${process.env.REPO_NAME}/contents/${process.env.FILE_PATH}`, {
+    method: 'PUT',
+    headers: {
+      Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      message: "Update students",
+      content: Buffer.from(JSON.stringify(newData, null, 2)).toString('base64'),
+      sha: fileData.sha
+    })
+  })
 }
