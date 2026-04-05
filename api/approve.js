@@ -1,14 +1,18 @@
-import fs from 'fs'
-
 export default async function handler(req, res) {
-  const { index } = JSON.parse(req.body)
+  const { index, password } = JSON.parse(req.body)
 
-  const file = JSON.parse(fs.readFileSync('./data/students.json'))
+  if (password !== process.env.ADMIN_PASSWORD) {
+    return res.status(401).json({ error: "Unauthorized" })
+  }
+
+  const file = await getFile()
 
   const student = file.pending.splice(index, 1)[0]
   file.approved.push(student)
 
-  fs.writeFileSync('./data/students.json', JSON.stringify(file, null, 2))
+  await updateFile(file)
 
-  res.status(200).json({ ok: true })
+  res.json({ ok: true })
 }
+
+// same helper function (copy from submit.js)
