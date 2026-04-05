@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Admin Panel</title>
+</head>
+<body>
+
+<h2>Pending Students</h2>
+<div id="list"></div>
+
+<script>
+async function loadData() {
+  const res = await fetch('/data/students.json')
+  const data = await res.json()
+
+  let html = ""
+
+  data.pending.forEach((s, i) => {
+    html += `
+      <div>
+        ${s.name} - ${s.batch}
+        <button onclick="approve(${i})">Approve</button>
+      </div>
+    `
+  })
+
+  document.getElementById("list").innerHTML = html
+}
+
+async function approve(index) {
+  await fetch('/api/approve', {
+    method: 'POST',
+    body: JSON.stringify({ index })
+  })
+  loadData()
+}
+
+loadData()
+</script>
+
+</body>
+</html>
