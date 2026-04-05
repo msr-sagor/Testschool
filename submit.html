@@ -1,27 +1,28 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Student Submit</title>
+<meta name="viewport" content="width=device-width">
+<script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
 
-<h2>Student Profile Submit</h2>
+<body class="bg-black text-white p-4">
 
-<input id="name" placeholder="Name"><br>
-<input id="batch" placeholder="SSC Batch"><br>
-<input id="school" placeholder="School Name"><br>
-<input id="year" placeholder="Year"><br>
+<h2 class="text-xl mb-4">Student Submit</h2>
 
-<button onclick="submitData()">Submit</button>
+<input id="name" class="w-full p-2 mb-2 bg-gray-800" placeholder="Name">
+<input id="batch" class="w-full p-2 mb-2 bg-gray-800" placeholder="SSC Batch">
+<input id="school" class="w-full p-2 mb-2 bg-gray-800" placeholder="School">
+<input id="year" class="w-full p-2 mb-2 bg-gray-800" placeholder="Year">
+
+<button onclick="submitData()" class="bg-green-600 p-2 w-full">Submit</button>
 
 <script>
 async function submitData() {
   const data = {
-    name: document.getElementById('name').value,
-    batch: document.getElementById('batch').value,
-    school: document.getElementById('school').value,
-    year: document.getElementById('year').value,
-    status: "pending"
+    name: name.value,
+    batch: batch.value,
+    school: school.value,
+    year: year.value
   }
 
   await fetch('/api/submit', {
@@ -29,7 +30,7 @@ async function submitData() {
     body: JSON.stringify(data)
   })
 
-  alert("Submitted! Wait for admin approval.")
+  alert("Submitted ✔")
 }
 </script>
 
